@@ -10,6 +10,40 @@
 
 <div class="banner-text">
     <img class="banner-img" src="~/images/happy weather.svg" />
-@*    <img class="banner-img" src="~/images/happy-weather-text.png" />*@
-</div> 
+    @*    <img class="banner-img" src="~/images/happy-weather-text.png" />*@
+</div>
 
+
+<div class="location-search-bar">
+    <input type="text" id="locationInput" placeholder="Enter Location">
+    <button id="getWeatherButton">Get Weather</button>
+
+</div>
+
+<div id="weatherResults"></div>
+<canvas id="weatherChart" class="lat-chart-canvas"></canvas>
+
+
+<!-- Bootstrap row for charts -->
+<div class="row w-100 mx-auto">
+    <!-- Temperature Chart Column -->
+    <div class="col-md-4 chart-column">
+        <h5 class="text-center chart-header">Temperature Chart</h5>
+        <canvas id="tempChart" class="chart-canvas"></canvas>
+    </div>
+
+    <!-- Humidity Chart Column -->
+    <div class="col-md-4 chart-column">
+        <h5 class="text-center chart-header">Humidity Chart</h5>
+        <canvas id="humidityChart" class="chart-canvas"></canvas>
+    </div>
+
+    <!-- Wind Speed Chart Column -->
+    <div class="col-md-4 chart-column">
+        <h5 class="text-center chart-header">Wind Speed Chart</h5>
+        <canvas id="windSpeedChart" class="chart-canvas"></canvas>
+    </div>
+</div>
+
+
+<script src="~/js/index.js"></script>

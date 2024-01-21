@@ -104,11 +104,38 @@ footer {
     text-align: start;
     border-radius: 0px;
 }
+.lat-chart-canvas {
+    max-width: 400px;
+    max-height: 400px;
+    display: block;
+    margin: auto;
+}
+
+.chart-canvas {
+    width: 100%;
+    height: auto;
+    max-width: 100%;
+    max-height: auto;
+    display: block;
+    margin: auto;
+}
+
+.location-search-bar {
+    margin: auto;
+    display: flex;
+    justify-content: center;
+}
+
+#weatherResults {
+    margin: auto;
+    display: flex;
+    justify-content: center;
+}
 
 #wrapper {
     display: flex;
     width: 100%;
-    height: 100vh;
+    height: 100%;
 }
 
 #sidebar-wrapper {
@@ -181,9 +208,16 @@ footer {
     /* Final position (on-screen), adjust as needed */
 }
 
+.chart-header {
+    font-family: 'Sansita One', cursive;
+    color: #dfb81a;
+    text-shadow: 1px 2px 1px rgba(192,36,36,1);
+}
+
 #page-content-wrapper {
     flex: 1;
     transition: margin-left 0.5s; /* Transition for the main content margin */
+    padding-bottom: 60px !important;
 }
 
 /* Styles for collapsed sidebar */

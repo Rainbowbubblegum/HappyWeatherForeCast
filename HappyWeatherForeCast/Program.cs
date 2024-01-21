@@ -1,7 +1,11 @@
+using HappyWeatherForeCast.Services.Implementations;
+using HappyWeatherForeCast.Services.Interfaces;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddHttpClient<IApiService, ApiService>();
 
 var app = builder.Build();
 
