@@ -1,198 +1,301 @@
-@import url("https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap");
-
-:root {
-    --header-height: 3rem;
-    --nav-width: 68px;
-    --first-color: #4723D9;
-    --first-color-light: #AFA5D9;
-    --white-color: #F7F6FB;
-    --body-font: 'Nunito', sans-serif;
-    --normal-font-size: 1rem;
-    --z-fixed: 100
-}
-
-*, ::before, ::after {
-    box-sizing: border-box
-}
-
-body {
-    position: relative;
-    margin: var(--header-height) 0 0 0;
-    padding: 0 1rem;
-    font-family: var(--body-font);
-    font-size: var(--normal-font-size);
-    transition: .5s
-}
-
-a {
-    text-decoration: none
-}
-
-.header {
-    width: 100%;
-    height: var(--header-height);
-    position: fixed;
-    top: 0;
-    left: 0;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 1rem;
-    background-color: var(--white-color);
-    z-index: var(--z-fixed);
-    transition: .5s
-}
-
-.header_toggle {
-    color: var(--first-color);
-    font-size: 1.5rem;
-    cursor: pointer
-}
-
-.header_img {
-    width: 35px;
-    height: 35px;
-    display: flex;
-    justify-content: center;
-    border-radius: 50%;
-    overflow: hidden
-}
-
-    .header_img img {
-        width: 40px
-    }
-
-.l-navbar {
-    position: fixed;
-    top: 0;
-    left: -30%;
-    width: var(--nav-width);
-    height: 100vh;
-    background-color: var(--first-color);
-    padding: .5rem 1rem 0 0;
-    transition: .5s;
-    z-index: var(--z-fixed)
-}
-
-.nav {
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    overflow: hidden
-}
-
-.nav_logo, .nav_link {
-    display: grid;
-    grid-template-columns: max-content max-content;
-    align-items: center;
-    column-gap: 1rem;
-    padding: .5rem 0 .5rem 1.5rem
-}
-
-.nav_logo {
-    margin-bottom: 2rem
-}
-
-.nav_logo-icon {
-    font-size: 1.25rem;
-    color: var(--white-color)
-}
-
-.nav_logo-name {
-    color: var(--white-color);
-    font-weight: 700
-}
-
-.nav_link {
-    position: relative;
-    color: var(--first-color-light);
-    margin-bottom: 1.5rem;
-    transition: .3s
-}
-
-    .nav_link:hover {
-        color: var(--white-color)
-    }
-
-.nav_icon {
-    font-size: 1.25rem
-}
-
-.show {
-    left: 0
-}
-
-.body-pd {
-    padding-left: calc(var(--nav-width) + 1rem)
-}
-
-.active {
-    color: var(--white-color)
-}
-
-    .active::before {
-        content: '';
-        position: absolute;
-        left: 0;
-        width: 2px;
-        height: 32px;
-        background-color: var(--white-color)
-    }
-
-.height-100 {
-    height: 100vh
-}
-
-@media screen and (min-width: 768px) {
-    body {
-        margin: calc(var(--header-height) + 1rem) 0 0 0;
-        padding-left: calc(var(--nav-width) + 2rem)
-    }
-
-    .header {
-        height: calc(var(--header-height) + 1rem);
-        padding: 0 2rem 0 calc(var(--nav-width) + 2rem)
-    }
-
-    .header_img {
-        width: 40px;
-        height: 40px
-    }
-
-        .header_img img {
-            width: 45px
-        }
-
-    .l-navbar {
-        left: 0;
-        padding: 1rem 1rem 0 0
-    }
-
-    .show {
-        width: calc(var(--nav-width) + 156px)
-    }
-
-    .body-pd {
-        padding-left: calc(var(--nav-width) + 188px)
-    }
-}
-
 html {
-  font-size: 14px;
+    font-size: 14px;
+    position: relative;
+    min-height: 100%;
 }
 
 @media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+    html {
+        font-size: 16px;
+    }
 }
 
-html {
-  position: relative;
-  min-height: 100%;
-}
+
 
 body {
-  margin-bottom: 60px;
+    font-family: 'Sansita One', cursive;
+    background-color: #c0f2f8 !important;
+}
+
+.index-banner {
+    max-width: calc(100vw - 50px);
+    overflow: hidden;
+}
+
+.banner-img {
+    display: flex;
+    margin: auto;
+    width: 100%;
+    max-width: 700px;
+    position: relative;
+    z-index: 899;
+    top: -5.5rem;
+}
+
+footer {
+    background-color: #fff;
+    font-family: 'Sansita One', cursive;
+    z-index: 99999999;
+}
+
+.nav-menu-item {
+    overflow: hidden;
+}
+
+.nav-menu-link {
+    width: 400px !important;
+    max-width: 80vw !important;
+    color: #a62828 !important;
+    border-bottom: 2px solid #a62828 !important;
+    font-size: 18px;
+    font-weight: 600;
+    font-family: 'Sansita One', cursive;
+}
+
+.footer-logo {
+    width: 180px;
+    position: relative;
+    top: -10px;
+}
+
+.happy-red {
+    color: #a62828 !important;
+}
+
+.nav-menu-item :hover {
+    background-color: #c0f2f8 !important;
+}
+
+#menu-toggle {
+    font-size: 18px;
+    font-weight: 600;
+    color: #fff;
+    background-color: #1b6ec2;
+    border-color: #1861ac;
+    width: 100%;
+    width: 400px;
+    text-align: start;
+    font-family: 'Sansita One', cursive;
+}
+
+.fa-bars {
+    padding-left: 5px;
+    padding-right: 23px;
+}
+
+.fa-times {
+    padding-left: 10px;
+    padding-right: 25px;
+}
+
+
+.fa-home {
+    padding-left: 1px;
+    padding-right: 20px;
+}
+
+#menu-toggle {
+    color: #a62828;
+    background-color: #ffd838;
+    border-color: #a62828;
+    border: 2px solid #a62828;
+    width: 100%;
+    width: 400px;
+    text-align: start;
+    border-radius: 0px;
+}
+
+#wrapper {
+    display: flex;
+    width: 100%;
+    height: 100vh;
+}
+
+#sidebar-wrapper {
+    border-right: 2px solid rgb(166, 40, 40);
+    overflow: hidden;
+    cursor: pointer;
+    width: 50px; /* Default expanded width */
+    height: 100vh;
+    transition: width 0.5s; /* Smooth transition for width */
+}
+
+footer {
+    transition: width 0.5s;
+}
+
+.c1, .c2 {
+    width: 100%;
+    min-width: 1000px;
+    position: relative;
+    top: 0px;
+    z-index: 1;
+}
+
+.c1 {
+    z-index: 2;
+    animation: slideInC1 0.68s ease-out forwards; /* Slower animation */
+}
+
+.c2 {
+    animation: slideInC2 0.8s ease-out forwards;
+    top: -200px;
+    margin-bottom: -200px;
+}
+
+.banner-text {
+    animation: fadeIn 2s ease-in-out forwards;
+}
+footer {
+    background-color: #ededed !important;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+@keyframes slideInC1 {
+    from {
+        top: -500px;
+    }
+    /* Initial position (off-screen) */
+    to {
+        top: 0px;
+    }
+    /* Final position (on-screen) */
+}
+
+@keyframes slideInC2 {
+    from {
+        top: -500px;
+    }
+    /* Initial position (off-screen) */
+    to {
+        top: -200px;
+    }
+    /* Final position (on-screen), adjust as needed */
+}
+
+#page-content-wrapper {
+    flex: 1;
+    transition: margin-left 0.5s; /* Transition for the main content margin */
+}
+
+/* Styles for collapsed sidebar */
+#wrapper.toggled #sidebar-wrapper {
+    width: 100px; /* Collapsed width */
+}
+
+    /* Hover effect for collapsed sidebar */
+    #wrapper.toggled #sidebar-wrapper:hover {
+        width: 250px; /* Expand on hover */
+    }
+
+@media (max-width: 1200px) {
+
+    #sidebar-wrapper {
+        position: fixed; /* Make sidebar fixed position */
+        z-index: 1000; /* Ensure it's on top of content */
+        height: 100%; /* Full height */
+        width: 50px; /* Initial width (collapsed state) */
+    }
+
+    #wrapper.toggled #sidebar-wrapper {
+        width: 400px; /* Expanded width */
+    }
+
+        #wrapper.toggled #sidebar-wrapper:hover {
+            width: 400px; /* Remain expanded on hover */
+        }
+
+    #page-content-wrapper {
+        /* Remove margin-left transition */
+        transition: none;
+        margin-left: 50px;
+    }
+
+
+    .container-fluid {
+        margin-left: 0; /* Ensure content is not pushed */
+    }
+}
+
+/* Adjustments for smaller screens */
+@media (max-width: 768px) {
+    #sidebar-wrapper {
+        width: 50px; /* Collapsed width for smaller screens */
+    }
+
+    #wrapper.toggled #sidebar-wrapper {
+        width: 50px; /* Keep collapsed state on smaller screens */
+    }
+}
+
+@media only screen and (min-width: 576px) {
+}
+
+@media only screen and (min-width: 768px) {
+}
+
+@media only screen and (min-width: 992px) {
+}
+
+@media only screen and (min-width: 1200px) {
+
+
+    .c2 {
+        animation: slideInC2 0.8s ease-out forwards;
+        top: -200px;
+        margin-bottom: -200px;
+    }
+
+
+    @keyframes slideInC2 {
+        from {
+            top: -500px;
+        }
+        /* Initial position (off-screen) */
+        to {
+            top: -300px;
+        }
+        /* Final position (on-screen), adjust as needed */
+    }
+    .c2 {
+        top: -300px;
+        margin-bottom: -300px;
+    }
+}
+
+@media only screen and (min-width: 1400px) {
+}
+
+@media (min-width: 1600px) {
+}
+
+@media (min-width: 1800px) {
+    .c2 {
+        top: -400px !important;
+        margin-bottom: -400px !important;
+    }
+}
+
+
+@media (min-width: 2000px) {
+    .c2 {
+        top: -500px !important;
+        margin-bottom: -500px !important;
+    }
+}
+
+
+@media (min-width: 1600px) {
+    .c2 {
+        top: -300px;
+        margin-bottom: -300px;
+    }
 }
