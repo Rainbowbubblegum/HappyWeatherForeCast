@@ -15,7 +15,6 @@
         } else {
             $("#wrapper").addClass("toggled");
             $("#sidebar-wrapper").css("width", "50px");
-
         }
     });
 

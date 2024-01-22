@@ -18,7 +18,42 @@ namespace HappyWeatherForeCast.Controllers
             _apiService = apiService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
+        {
+
+            var location = HttpContext.Session.GetString("SearchLocation");
+            ForecastModel model = new ForecastModel();
+
+            if (!string.IsNullOrEmpty(location))
+            {
+                string endpoint = _apiService.ConstructEndpoint("WeatherAPI", "forecast.json", location + "&days=7&aqi=no&alerts=no");
+                var response = await _apiService.GetAsync<ForecastModel>(endpoint);
+
+                if (!response.IsError)
+                {
+                    model = response.Model;
+                }
+            }
+
+            return View(model);
+        }
+        public async Task<IActionResult> GetForecastData(string location)
+        {
+            HttpContext.Session.SetString("SearchLocation", location);
+            string endpoint = _apiService.ConstructEndpoint("WeatherAPI", "forecast.json", location + "&days=7&aqi=no&alerts=no");
+            var response = await _apiService.GetAsync<ForecastModel>(endpoint);
+
+            if (response.IsError)
+            {
+                return Json(new { success = false, message = response.Message });
+            }
+            else
+            {
+                return Json(new { success = true, data = response.Model });
+            }
+        }
+
+        public IActionResult Additionals()
         {
             return View();
         }
@@ -37,19 +72,9 @@ namespace HappyWeatherForeCast.Controllers
             }
         }
 
-        public async Task<IActionResult> GetForecastData(string location)
-        {
-            string endpoint = _apiService.ConstructEndpoint("WeatherAPI", "forecast.json", location + "&days=1&aqi=no&alerts=no");
-            var response = await _apiService.GetAsync<ForecastModel>(endpoint);
-            if (response.IsError)
-            {
-                return Json(new { success = false, message = response.Message });
-            }
-            else
-            {
-                return Json(new { success = true, data = response.Model });
-            }
-        }
+
+
+
 
 
         public IActionResult Privacy()

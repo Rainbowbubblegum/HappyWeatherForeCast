@@ -25,6 +25,8 @@ getWeatherButton.addEventListener("click", () => {
 
     getCurrent(location);
     getForecastData(location);
+    $("#sidebar-wrapper").css("height", "auto");
+    $('.charts-container').fadeIn();
 });
 
 
@@ -33,10 +35,10 @@ const getCurrent = (location) => {
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                const resultsDiv = document.getElementById("weatherResults");
+                const resultsDiv = $(".replaceHtml");
                 resultsDiv.innerHTML = ""; // Clear previous results
                 data.data.forEach(item => {
-                    resultsDiv.innerHTML += `<p>${item.name}, ${item.region}, ${item.country} - Lat: ${item.lat}, Lon: ${item.lon}</p>`;
+                    resultsDiv.innerHTML += `<p>${item.name}, ${item.region}, ${item.country}</p>`;
                 });
 
                 renderChart(data.data);
@@ -53,7 +55,7 @@ const getForecastData = (location) => {
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                // Call a function to render charts for forecast data
+                renderForecastTable(data.data);
                 renderForecastCharts(data.data);
             } else {
                 alert(`Error: ${data.message}`);
@@ -121,5 +123,88 @@ const renderChart = (data) => {
                 }
             }
         }
+    });
+};
+const renderForecastTable = (forecastData) => {
+    const weatherResults = document.querySelector(".replaceHtml");
+    weatherResults.innerHTML = '';
+
+    if (forecastData && forecastData.forecast && forecastData.forecast.forecastday) {
+        weatherResults.innerHTML = buildForecastTabsHTML(forecastData) + buildForecastTableHTML(forecastData);
+        attachTabEventListeners(); // Reattach event listeners to the new tabs
+    } else {
+        weatherResults.innerHTML = '<p>No forecast data available.</p>';
+    }
+};
+
+const buildForecastTabsHTML = (forecastData) => {
+    let tabsHTML = '<ul class="nav nav-tabs" id="forecastTabs">';
+    forecastData.forecast.forecastday.forEach((day, index) => {
+        const dayId = `dayTab_${day.date.replace(/-/g, "")}`;
+        tabsHTML += `
+            <li class="nav-item">
+                <a class="nav-link ${index === 0 ? 'active' : ''}" href="javascript:void(0);" data-day-id="${dayId}">
+                    ${new Date(day.date).toLocaleDateString('en-US', { weekday: 'long' })}
+                </a>
+            </li>`;
+    });
+    tabsHTML += '</ul>';
+    return tabsHTML;
+};
+
+const buildForecastTableHTML = (forecastData) => {
+    let tablesHTML = '<div class="forecast-tables">';
+    forecastData.forecast.forecastday.forEach((day, index) => {
+        const dayId = `dayTab_${day.date.replace(/-/g, "")}`;
+        const formattedDate = new Date(day.date).toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' });
+
+        tablesHTML += `
+            <div id="${dayId}" class="container mt-4 table-container dayForecast" style="${index === 0 ? '' : 'display: none;'}">
+                <h4>${formattedDate}</h4>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Time</th>
+                            <th>Conditions</th>
+                            <th>Temperature</th>
+                            <th>Rain %</th>
+                        </tr>
+                    </thead>
+                    <tbody>`;
+
+        day.hour.forEach(hour => {
+            const hourTime = new Date(hour.time).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            const iconUrl = `https:${hour.condition.icon}`;
+
+            tablesHTML += `
+                        <tr>
+                            <td>${hourTime}</td>
+                            <td>
+                                <img class="weather-icon" src="${iconUrl}" alt="${hour.condition.text}" />
+                                ${hour.condition.text}
+                            </td>
+                            <td>${hour.temp_c} °C</td>
+                            <td>${hour.chance_of_rain} %</td>
+                        </tr>`;
+        });
+
+        tablesHTML += `
+                    </tbody>
+                </table>
+            </div>`;
+    });
+    tablesHTML += '</div>';
+    return tablesHTML;
+};
+const attachTabEventListeners = () => {
+    const tabs = document.querySelectorAll('#forecastTabs .nav-link');
+    tabs.forEach(tab => {
+        tab.addEventListener('click', function (event) {
+            event.preventDefault();
+            const dayId = tab.getAttribute('data-day-id');
+            showDayForecast(dayId);
+            tabs.forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+        });
     });
 };

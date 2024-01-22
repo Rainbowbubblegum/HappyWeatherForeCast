@@ -4,6 +4,52 @@ html {
     min-height: 100%;
 }
 
+@media (max-width: 1200px) {
+
+    #sidebar-wrapper {
+        position: fixed; /* Make sidebar fixed position */
+        z-index: 1000; /* Ensure it's on top of content */
+        height: 100vh !important; /* Full height */
+        width: 50px; /* Initial width (collapsed state) */
+    }
+
+    #wrapper.toggled #sidebar-wrapper {
+        width: 400px; /* Expanded width */
+    }
+
+        #wrapper.toggled #sidebar-wrapper:hover {
+            width: 400px; /* Remain expanded on hover */
+        }
+
+    #page-content-wrapper {
+        transition: none;
+        max-width: calc(100vw - 67px);
+        margin-left: 50px;
+    }
+
+    .container-fluid {
+        margin-left: 0; /* Ensure content is not pushed */
+    }
+}
+
+
+/* Adjustments for smaller screens */
+@media (max-width: 768px) {
+    .index-banner {
+        max-width: calc(100vw - 32px);
+        overflow: hidden;
+    }
+
+    #sidebar-wrapper {
+        height: 100vh !important;
+        width: 50px; /* Collapsed width for smaller screens */
+    }
+
+    #wrapper.toggled #sidebar-wrapper {
+        width: 50px; /* Keep collapsed state on smaller screens */
+    }
+}
+
 @media (min-width: 768px) {
     html {
         font-size: 16px;
@@ -16,10 +62,14 @@ body {
     font-family: 'Sansita One', cursive;
     background-color: #c0f2f8 !important;
 }
-
-.index-banner {
+.page-content-wrapper {
     max-width: calc(100vw - 50px);
+    margin-left: 50px;
+}
+.index-banner {
+
     overflow: hidden;
+   
 }
 
 .banner-img {
@@ -62,6 +112,32 @@ footer {
     color: #a62828 !important;
 }
 
+#getWeatherButton {
+    background-color: #ffd838;
+    box-shadow: 2px 10px 18px -11px rgba(171,8,8,0.75) inset, /* Inset shadow */
+    2px 10px 18px -11px rgba(171,8,8,0.75); /* Outset shadow */
+    -webkit-box-shadow: 0px -4px 11px -3px rgb(255 46 36) inset, /* Inset shadow for WebKit */
+    2px 10px 18px -11px rgb(217 14 14); /* Outset shadow for WebKit */
+    -moz-box-shadow: 2px 10px 18px -11px rgba(171,8,8,0.75) inset, /* Inset shadow for Mozilla */
+    2px 10px 18px -11px rgba(171,8,8,0.75); /* Outset shadow for Mozilla */
+    border: 2px solid #9f3833;
+    border-radius: 30px;
+    color: #fd6449;
+    font-size: 17px;
+    font-weight: 700;
+    font-family: 'Sansita One', cursive;
+    padding-left: 20px;
+    padding-right: 20px;
+
+}
+
+    #getWeatherButton:hover {
+        background-color: #ffe060;
+        border-color: #db3113;
+        color: #db3113;
+    }
+
+
 .nav-menu-item :hover {
     background-color: #c0f2f8 !important;
 }
@@ -73,7 +149,7 @@ footer {
     background-color: #1b6ec2;
     border-color: #1861ac;
     width: 100%;
-    width: 400px;
+    width: 400px!important;
     text-align: start;
     font-family: 'Sansita One', cursive;
 }
@@ -124,18 +200,39 @@ footer {
     margin: auto;
     display: flex;
     justify-content: center;
+    margin-bottom:20px;
 }
 
 #weatherResults {
     margin: auto;
     display: flex;
     justify-content: center;
+    font-size: 20px;
+    color: #39a2e7;
+}
+
+#locationInput {
+    height: 50px;
+    width:100%;
+    max-width: 250px;
+    margin-right: 5px;
+    padding-left: 20px;
+    border-radius: 30px;
+    border: 2px solid #ffd838;
+    box-shadow: 2px 10px 18px -11px rgba(171,8,8,0.75);
+    -webkit-box-shadow: 2px 10px 18px -11px rgb(217 14 14);
+    -moz-box-shadow: 2px 10px 18px -11px rgba(171,8,8,0.75);
 }
 
 #wrapper {
     display: flex;
     width: 100%;
     height: 100%;
+}
+
+.charts-container {
+    padding: 20px;
+    display: none;
 }
 
 #sidebar-wrapper {
@@ -174,7 +271,7 @@ footer {
     animation: fadeIn 2s ease-in-out forwards;
 }
 footer {
-    background-color: #ededed !important;
+    background-color: #dd8500a6 !important;
 }
 
 @keyframes fadeIn {
@@ -214,11 +311,60 @@ footer {
     text-shadow: 1px 2px 1px rgba(192,36,36,1);
 }
 
+.weather-icon {
+    width: 60px;
+    height: 60px;
+}
+
+.dayForecast > h4 {
+    color: #dfb81a;
+    text-shadow: 1px 2px 1px rgba(192,36,36,1);
+}
+.weeklyHeader {
+    text-align: center;
+    font-family: 'Sansita One', cursive;
+    color: #dfb81a;
+    font-weight: 900;
+    text-shadow: 1px 2px 1px rgba(192,36,36,1);
+    padding-top: 100px;
+}
+
+.table-container {
+    width: 95%;
+    margin: auto;
+}
+
+tr {
+    border-color: #c75154!important;
+}
+
+thead > tr > th {
+    background-color: #ffaa41 !important;
+    border-color: #be5255 !important;
+    font-family: 'Sansita One', cursive;
+    color: #e9e18c !important;
+    text-shadow: 1px 2px 1px rgba(192,36,36,1);
+}
+
+tbody > tr > td {
+    background-color: #ffd838a3 !important;
+    border-color: #be5255;
+    font-family: 'Sansita One', cursive;
+    color: #be5255 !important;
+}
+
 #page-content-wrapper {
     flex: 1;
     transition: margin-left 0.5s; /* Transition for the main content margin */
     padding-bottom: 60px !important;
 }
+
+.table {
+    margin: 0px !important;
+    max-width: 1200px;
+    overflow-x: scroll;
+}
+
 
 /* Styles for collapsed sidebar */
 #wrapper.toggled #sidebar-wrapper {
@@ -230,50 +376,48 @@ footer {
         width: 250px; /* Expand on hover */
     }
 
-@media (max-width: 1200px) {
-
-    #sidebar-wrapper {
-        position: fixed; /* Make sidebar fixed position */
-        z-index: 1000; /* Ensure it's on top of content */
-        height: 100%; /* Full height */
-        width: 50px; /* Initial width (collapsed state) */
-    }
-
-    #wrapper.toggled #sidebar-wrapper {
-        width: 400px; /* Expanded width */
-    }
-
-        #wrapper.toggled #sidebar-wrapper:hover {
-            width: 400px; /* Remain expanded on hover */
-        }
-
-    #page-content-wrapper {
-        /* Remove margin-left transition */
-        transition: none;
-        margin-left: 50px;
-    }
-
-
-    .container-fluid {
-        margin-left: 0; /* Ensure content is not pushed */
-    }
+tr {
+    max-height: 80px !important;
+}
+td {
+    padding: 5px !important;
 }
 
-/* Adjustments for smaller screens */
-@media (max-width: 768px) {
-    #sidebar-wrapper {
-        width: 50px; /* Collapsed width for smaller screens */
+.nav-tabs {
+    max-width: 1000px;
+    position: relative;
+    margin: auto;
+}
+    .nav-link.active {
+        color: #fc654f!important;
+        background: #ffc44a!important;
+        font-size: 17px!important;
+        font-weight: 700;
+        font-family: 'Sansita One', cursive;
+        border-color: #be5255!important;
     }
+    .nav-tabs .nav-item.show .nav-link, .nav-tabs .nav-link {
+        color: #be5255;
+        font-family: 'Sansita One', cursive;
+    }
+        .nav-tabs .nav-item.show .nav-link, .nav-tabs .nav-link:hover {
+            color: #fc654f;
+            font-family: 'Sansita One', cursive;
+            border-color: #be5255;
+        }
 
-    #wrapper.toggled #sidebar-wrapper {
-        width: 50px; /* Keep collapsed state on smaller screens */
-    }
+#forecastTabs {
+    border-color: #bf5153;
 }
 
 @media only screen and (min-width: 576px) {
 }
 
 @media only screen and (min-width: 768px) {
+    .weather-icon {
+        margin-top: -20px;
+        margin-bottom: -20px;
+    }
 }
 
 @media only screen and (min-width: 992px) {
@@ -309,6 +453,10 @@ footer {
 }
 
 @media (min-width: 1600px) {
+    .c2 {
+        top: -300px;
+        margin-bottom: -300px;
+    }
 }
 
 @media (min-width: 1800px) {
@@ -326,10 +474,3 @@ footer {
     }
 }
 
-
-@media (min-width: 1600px) {
-    .c2 {
-        top: -300px;
-        margin-bottom: -300px;
-    }
-}
