@@ -37,6 +37,12 @@ namespace HappyWeatherForeCast.Controllers
 
             return View(model);
         }
+
+        public IActionResult AboutMyself()
+        {
+            return View();
+        }
+
         public async Task<IActionResult> GetForecastData(string location)
         {
             HttpContext.Session.SetString("SearchLocation", location);
@@ -53,10 +59,7 @@ namespace HappyWeatherForeCast.Controllers
             }
         }
 
-        public IActionResult Additionals()
-        {
-            return View();
-        }
+
 
         public async Task<IActionResult> GetWeatherData(string location)
         {

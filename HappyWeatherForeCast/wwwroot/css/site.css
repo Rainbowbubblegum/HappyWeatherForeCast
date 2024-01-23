@@ -1,3 +1,5 @@
+/* sorry about the stylesheet, TODO :: beutify css :D */
+
 html {
     font-size: 14px;
     position: relative;
@@ -82,10 +84,21 @@ body {
     top: -5.5rem;
 }
 
+.about-me-text {
+    font-family: 'Sansita One', cursive;
+    color: #dfb81a;
+    font-weight: 900;
+    text-shadow: 1px 2px 1px rgba(192,36,36,1);
+}
+
 footer {
     background-color: #fff;
     font-family: 'Sansita One', cursive;
     z-index: 99999999;
+}
+
+.bg-light {
+    background-color: #e9e18c !important;
 }
 
 .nav-menu-item {
@@ -96,6 +109,7 @@ footer {
     width: 400px !important;
     max-width: 80vw !important;
     color: #a62828 !important;
+    text-shadow: 1px 2px 1px rgb(233 225 140);
     border-bottom: 2px solid #a62828 !important;
     font-size: 18px;
     font-weight: 600;
@@ -138,9 +152,6 @@ footer {
     }
 
 
-.nav-menu-item :hover {
-    background-color: #c0f2f8 !important;
-}
 
 #menu-toggle {
     font-size: 18px;
@@ -165,7 +176,7 @@ footer {
 }
 
 
-.fa-home {
+.fa-home, .fa-user {
     padding-left: 1px;
     padding-right: 20px;
 }
@@ -414,6 +425,11 @@ td {
     border-color: #bf5153;
 }
 
+.nav-menu-item :hover {
+    background-color: #feaa4f !important;
+    color: #e9e18c !important;
+    text-shadow: 1px 2px 1px rgba(192,36,36,1);
+}
 @media only screen and (min-width: 576px) {
 }
 
