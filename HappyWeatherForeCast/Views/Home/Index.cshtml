@@ -1,8 +1,153 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@model ForecastModel
+
+@{
+    ViewData["Title"] = "Home";
+    List<Forecastday>? sortedForecastDays = null;
+
+    if (Model != null && Model.forecast != null){
+        sortedForecastDays = DateUtils.SortByDayOfWeek(Model.forecast.forecastday, x => DateTime.TryParse(x.date, out var dt) ? dt : DateTime.MinValue);
+    }
+
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="index-banner">
+    <img class="c1" src="~/images/clouds1.png" />
+    <img class="c2" src="~/images/clouds2.png" />
 </div>
+
+<div class="banner-text">
+    <img class="banner-img" src="~/images/happy weather.svg" />
+</div>
+
+
+<div class="location-search-bar">
+    <input type="text" id="locationInput" placeholder="Enter Location" value="@(!string.IsNullOrEmpty(Context.Session.GetString("SearchLocation")) ? Context.Session.GetString("SearchLocation") : "")">
+    <button id="getWeatherButton">Get Weather</button>
+</div>
+
+<div id="weatherResults"></div>
+<h2 class="weeklyHeader" style="display:none;">This Weeks Weather Forecast</h2>
+
+<div class="replaceHtml">
+    @if (Model != null && Model.forecast != null && sortedForecastDays != null && sortedForecastDays.Any())
+    {
+        <ul class="nav nav-tabs" id="forecastTabs">
+            @foreach (var forecastDay in sortedForecastDays)
+            {
+                var dayId = $"dayTab_{forecastDay.date.Replace("-", "")}";
+                <li class="nav-item">
+                    <a class="nav-link @(sortedForecastDays.IndexOf(forecastDay) == 0 ? "active" : "")" href="javascript:void(0);" data-day-id="@dayId">
+                        @DateTime.Parse(forecastDay.date).ToString("dddd")
+                    </a>
+                </li>
+            }
+        </ul>
+
+        <div class="forecast-tables">
+            @foreach (var forecastDay in Model.forecast.forecastday)
+            {
+                var dayId = $"dayTab_{forecastDay.date.Replace("-", "")}";
+                <div id="@dayId" class="container mt-4 table-container dayForecast" style="@(Model.forecast.forecastday.IndexOf(forecastDay) == 0 ? "" : "display: none;")">
+                    <h4>@DateTime.Parse(forecastDay.date).ToString("dddd, MMM dd")</h4>
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Time</th>
+                                <th>Conditions</th>
+                                <th class="temp-header">Temperature ( Click To Toggle )</th>
+                                <th>Rain %</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var hour in forecastDay.hour)
+                            {
+                                var hourTime = DateTime.Parse(hour.time).ToString("HH:mm:ss");
+                                <tr>
+                                    <td>@hourTime</td>
+                                    <td>
+                                        <img class="weather-icon" src="https:@hour.condition.icon" alt="@hour.condition.text" />
+                                        @hour.condition.text
+                                    </td>
+                        <td class="temp-cell" data-temp-c="@hour.temp_c" data-temp-f="@hour.temp_f">@hour.temp_c °C</td>
+                                    <td>@hour.chance_of_rain %</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </div>
+    }
+</div>
+
+<div class="charts-container">
+    <div class="row w-100 mx-auto">
+        <!-- Temperature Chart Column -->
+        <div class=" chart-column">
+            <h5 class="text-center chart-header">Coordinate Map</h5>
+            <canvas id="weatherChart" class="lat-chart-canvas"></canvas>
+        </div>
+
+    </div>
+    <!-- Bootstrap row for charts -->
+    <div class="row w-100 mx-auto">
+        <!-- Temperature Chart Column -->
+        <div class="col-lg-4 chart-column">
+            <h5 class="text-center chart-header">Temperature Chart</h5>
+            <canvas id="tempChart" class="chart-canvas"></canvas>
+        </div>
+
+        <!-- Humidity Chart Column -->
+        <div class="col-lg-4 chart-column">
+            <h5 class="text-center chart-header">Humidity Chart</h5>
+            <canvas id="humidityChart" class="chart-canvas"></canvas>
+        </div>
+
+        <!-- Wind Speed Chart Column -->
+        <div class="col-lg-4 chart-column">
+            <h5 class="text-center chart-header">Wind Speed Chart</h5>
+            <canvas id="windSpeedChart" class="chart-canvas"></canvas>
+        </div>
+    </div>
+
+</div>
+
+@section Scripts{
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var tabs = document.querySelectorAll('#forecastTabs .nav-link');
+            tabs.forEach(function (tab) {
+                tab.addEventListener('click', function (event) {
+                    event.preventDefault();
+                    var dayId = tab.getAttribute('data-day-id');
+                    showDayForecast(dayId);
+                    tabs.forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                });
+            });
+
+            if (tabs.length > 0) {
+                tabs[0].click();
+            }
+
+            $('th:contains("Temperature")').on('click', function () {
+                toggleTemperatureUnits();
+            });
+        });
+        
+
+
+        function showDayForecast(dayId) {
+            var tables = document.querySelectorAll('.dayForecast');
+            tables.forEach(function (table) {
+                table.style.display = 'none';
+            });
+
+            var selectedTable = document.getElementById(dayId);
+            if (selectedTable) {
+                selectedTable.style.display = 'block';
+            }
+        }
+    </script>
+    <script src="~/js/index.js"></script>
+}
