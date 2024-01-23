@@ -2,6 +2,12 @@
 
 @{
     ViewData["Title"] = "Home";
+    List<Forecastday>? sortedForecastDays = null;
+
+    if (Model != null && Model.forecast != null){
+        sortedForecastDays = DateUtils.SortByDayOfWeek(Model.forecast.forecastday, x => DateTime.TryParse(x.date, out var dt) ? dt : DateTime.MinValue);
+    }
+
 }
 
 <div class="index-banner">
@@ -11,29 +17,26 @@
 
 <div class="banner-text">
     <img class="banner-img" src="~/images/happy weather.svg" />
-    @*    <img class="banner-img" src="~/images/happy-weather-text.png" />*@
 </div>
 
 
 <div class="location-search-bar">
-    <input type="text" id="locationInput" placeholder="Enter Location">
+    <input type="text" id="locationInput" placeholder="Enter Location" value="@(!string.IsNullOrEmpty(Context.Session.GetString("SearchLocation")) ? Context.Session.GetString("SearchLocation") : "")">
     <button id="getWeatherButton">Get Weather</button>
-
 </div>
 
 <div id="weatherResults"></div>
-<h2 class="weeklyHeader">This Weeks Weather Forecast</h2>
+<h2 class="weeklyHeader" style="display:none;">This Weeks Weather Forecast</h2>
 
 <div class="replaceHtml">
-    @if (Model != null && Model.forecast != null && Model.forecast.forecastday != null && Model.forecast.forecastday.Any())
+    @if (Model != null && Model.forecast != null && sortedForecastDays != null && sortedForecastDays.Any())
     {
         <ul class="nav nav-tabs" id="forecastTabs">
-            @for (int i = 0; i < Model.forecast.forecastday.Count; i++)
+            @foreach (var forecastDay in sortedForecastDays)
             {
-                var forecastDay = Model.forecast.forecastday[i];
                 var dayId = $"dayTab_{forecastDay.date.Replace("-", "")}";
                 <li class="nav-item">
-                    <a class="nav-link @(i == 0 ? "active" : "")" href="javascript:void(0);" data-day-id="@dayId">
+                    <a class="nav-link @(sortedForecastDays.IndexOf(forecastDay) == 0 ? "active" : "")" href="javascript:void(0);" data-day-id="@dayId">
                         @DateTime.Parse(forecastDay.date).ToString("dddd")
                     </a>
                 </li>
@@ -51,7 +54,7 @@
                             <tr>
                                 <th>Time</th>
                                 <th>Conditions</th>
-                                <th>Temperature</th>
+                                <th class="temp-header">Temperature ( Click To Toggle )</th>
                                 <th>Rain %</th>
                             </tr>
                         </thead>
@@ -65,7 +68,7 @@
                                         <img class="weather-icon" src="https:@hour.condition.icon" alt="@hour.condition.text" />
                                         @hour.condition.text
                                     </td>
-                                    <td>@hour.temp_c °C</td>
+                        <td class="temp-cell" data-temp-c="@hour.temp_c" data-temp-f="@hour.temp_f">@hour.temp_c °C</td>
                                     <td>@hour.chance_of_rain %</td>
                                 </tr>
                             }
@@ -126,7 +129,13 @@
             if (tabs.length > 0) {
                 tabs[0].click();
             }
+
+            $('th:contains("Temperature")').on('click', function () {
+                toggleTemperatureUnits();
+            });
         });
+        
+
 
         function showDayForecast(dayId) {
             var tables = document.querySelectorAll('.dayForecast');

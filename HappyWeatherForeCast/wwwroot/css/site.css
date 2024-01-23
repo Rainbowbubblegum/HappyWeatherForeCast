@@ -334,8 +334,12 @@ footer {
     margin: auto;
 }
 
+.temp-header{
+    cursor:pointer;
+}
+
 tr {
-    border-color: #c75154!important;
+    border-color: #c75154 !important;
 }
 
 thead > tr > th {

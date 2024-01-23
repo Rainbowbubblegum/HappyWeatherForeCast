@@ -1,5 +1,6 @@
 ﻿
 document.addEventListener('DOMContentLoaded', () => {
+    const locationInput = document.getElementById('locationInput');
     setTimeout(() => {
         // Function to simulate typing
         const simulateTyping = (element, text, index, interval) => {
@@ -13,10 +14,40 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         // Start simulating typing
-        const locationInput = document.getElementById('locationInput');
-        simulateTyping(locationInput, 'South Africa', 0, 100); // 100ms interval between each letter
-    }, 2000);
+
+        if (!locationInput.value) {
+            setTimeout(() => {
+                simulateTyping(locationInput, 'South Africa', 0, 100);
+            }, 2000);
+        } else {
+            $("#sidebar-wrapper").css("height", "auto");
+            getForecastData(locationInput.value, false);
+            getCurrent(locationInput.value);
+            $('.charts-container').fadeIn();
+            $('.weeklyHeader').fadeIn();
+
+            $('.temp-header').on('click', function () {
+                toggleTemperatureUnits();
+            });
+            
+        }
+    });
+
+    $('.temp-header').on('click', function () {
+        toggleTemperatureUnits();
+    });
 });
+
+function toggleTemperatureUnits() {
+    $('.temp-cell').each(function () {
+        var cell = $(this);
+        var isCelsius = cell.text().includes('°C');
+        var tempC = cell.data('temp-c');
+        var tempF = cell.data('temp-f');
+
+        cell.text(isCelsius ? `${tempF} °F` : `${tempC} °C`);
+    });
+}
 
 const getWeatherButton = document.getElementById("getWeatherButton");
 
@@ -27,6 +58,7 @@ getWeatherButton.addEventListener("click", () => {
     getForecastData(location);
     $("#sidebar-wrapper").css("height", "auto");
     $('.charts-container').fadeIn();
+    $('.weeklyHeader').fadeIn();
 });
 
 
@@ -36,7 +68,7 @@ const getCurrent = (location) => {
         .then(data => {
             if (data.success) {
                 const resultsDiv = $(".replaceHtml");
-                resultsDiv.innerHTML = ""; // Clear previous results
+                resultsDiv.innerHTML = "";
                 data.data.forEach(item => {
                     resultsDiv.innerHTML += `<p>${item.name}, ${item.region}, ${item.country}</p>`;
                 });
@@ -50,12 +82,14 @@ const getCurrent = (location) => {
         .catch(error => console.error('Error:', error));
 }
 
-const getForecastData = (location) => {
+const getForecastData = (location, drawTable = true) => {
     fetch(`/Home/GetForecastData?location=${location}`)
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                renderForecastTable(data.data);
+                if (drawTable) {
+                    renderForecastTable(data.data);
+                }
                 renderForecastCharts(data.data);
             } else {
                 alert(`Error: ${data.message}`);
@@ -137,9 +171,18 @@ const renderForecastTable = (forecastData) => {
     }
 };
 
+function getDayOfWeekIndex(dateString) {
+    const dayOfWeek = new Date(dateString).getDay();
+    return (dayOfWeek === 0) ? 6 : dayOfWeek - 1; // Convert so that Monday is 0, Sunday is 6
+}
+
 const buildForecastTabsHTML = (forecastData) => {
     let tabsHTML = '<ul class="nav nav-tabs" id="forecastTabs">';
-    forecastData.forecast.forecastday.forEach((day, index) => {
+    const sortedForecastDays = forecastData.forecast.forecastday.sort((a, b) =>
+        getDayOfWeekIndex(a.date) - getDayOfWeekIndex(b.date)
+    );
+
+    sortedForecastDays.forEach((day, index) => {
         const dayId = `dayTab_${day.date.replace(/-/g, "")}`;
         tabsHTML += `
             <li class="nav-item">
@@ -152,9 +195,14 @@ const buildForecastTabsHTML = (forecastData) => {
     return tabsHTML;
 };
 
+
 const buildForecastTableHTML = (forecastData) => {
     let tablesHTML = '<div class="forecast-tables">';
-    forecastData.forecast.forecastday.forEach((day, index) => {
+    const sortedForecastDays = forecastData.forecast.forecastday.sort((a, b) =>
+        getDayOfWeekIndex(a.date) - getDayOfWeekIndex(b.date)
+    );
+
+    sortedForecastDays.forEach((day, index) => {
         const dayId = `dayTab_${day.date.replace(/-/g, "")}`;
         const formattedDate = new Date(day.date).toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' });
 
@@ -166,7 +214,7 @@ const buildForecastTableHTML = (forecastData) => {
                         <tr>
                             <th>Time</th>
                             <th>Conditions</th>
-                            <th>Temperature</th>
+                            <th class="temp-header">Temperature ( Click To Toggle )</th>
                             <th>Rain %</th>
                         </tr>
                     </thead>
@@ -183,7 +231,7 @@ const buildForecastTableHTML = (forecastData) => {
                                 <img class="weather-icon" src="${iconUrl}" alt="${hour.condition.text}" />
                                 ${hour.condition.text}
                             </td>
-                            <td>${hour.temp_c} °C</td>
+                            <td class="temp-cell" data-temp-c="${hour.temp_c}" data-temp-f="${hour.temp_f}">${hour.temp_c} °C</td>
                             <td>${hour.chance_of_rain} %</td>
                         </tr>`;
         });
@@ -196,6 +244,7 @@ const buildForecastTableHTML = (forecastData) => {
     tablesHTML += '</div>';
     return tablesHTML;
 };
+
 const attachTabEventListeners = () => {
     const tabs = document.querySelectorAll('#forecastTabs .nav-link');
     tabs.forEach(tab => {
