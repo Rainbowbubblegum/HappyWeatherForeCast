@@ -59,8 +59,6 @@ namespace HappyWeatherForeCast.Controllers
             }
         }
 
-
-
         public async Task<IActionResult> GetWeatherData(string location)
         {
             string endpoint = _apiService.ConstructEndpoint("WeatherAPI", "search.json", location);
@@ -74,11 +72,6 @@ namespace HappyWeatherForeCast.Controllers
                 return Json(new { success = true, data = response.Model });
             }
         }
-
-
-
-
-
 
         public IActionResult Privacy()
         {
